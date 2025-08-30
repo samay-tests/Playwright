@@ -113,10 +113,34 @@ test.only('handling browser alerts', async({})=>{
   function text(){
     return "SAP"
   } 
+ 
    expect( await page.getByRole('textbox', { name: 'Enter Your Name' })).toBeVisible(); 
      await page.getByRole('textbox', { name: 'Enter Your Name' }).fill(text())
-          await page.getByRole('button', { name: 'Alert' }).click()
-          console.log(text())
+
+     
+    //  await page.getByRole('textbox', { name: 'Enter Your Name' }).toHaveValue(text());
+// const [dialog] = await Promise.all([
+//   page.waitForEvent('dialog'),             // start listening
+//   page.locator('#alertbtn').click()        // trigger alert, no await here
+// ]);
+
+// expect(dialog.message()).toBe(
+//   "Hello SAP, share this practice page and share your knowledge"
+// );
+// await dialog.accept();
+
+
+ // Add listener before clicking
+  page.on('dialog', async dialog => {
+    expect(dialog.message()).toBe("Hello " + text() + ", share this practice page and share your knowledge");
+    await dialog.accept();
+  });
+
+  // Trigger the alert
+  await page.locator('#alertbtn').click();
+
+
+
 
   
   
