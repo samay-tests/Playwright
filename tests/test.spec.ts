@@ -108,7 +108,7 @@ test('test', async ({ page }) => {
   await expect(page.locator('#radio-btn-example legend')).toBeVisible();
 });
 
-test.only('handling browser alerts', async({})=>{ 
+test('handling browser alerts', async({})=>{ 
 
   function text(){
     return "SAP"
@@ -138,13 +138,15 @@ test.only('handling browser alerts', async({})=>{
 
   // Trigger the alert
   await page.locator('#alertbtn').click();
-
-
-
-
-  
-  
-
 })
 
+test.only("handling web tables", async({})=>{
+
+await page.waitForTimeout(2000);
+let x=  (await page.locator (`table[name= 'courses']  tr`).nth(0).scrollIntoViewIfNeeded())
+await (await page.locator (`table[name= 'courses']  tr`).nth(0)).click()
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+await page.waitForTimeout(2000);
+
+})
 });
